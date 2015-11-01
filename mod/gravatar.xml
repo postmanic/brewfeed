@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+Array ( 
+[id] => 17177852 
+[hash] => 9ca622717b1ba23fc5aa6b47878131d7 
+[requestHash] => 9ca622717b1ba23fc5aa6b47878131d7 
+[profileUrl] => http://gravatar.com/larsrj 
+[preferredUsername] => larsrj 
+[thumbnailUrl] => http://1.gravatar.com/avatar/9ca622717b1ba23fc5aa6b47878131d7 
+
+[photos] => Array ( 
+
+[0] => Array ( 
+[value] => http://1.gravatar.com/avatar/9ca622717b1ba23fc5aa6b47878131d7 [
+type] => thumbnail ) ) 
+
+[name] => Array ( 
+[givenName] => Lars 
+[familyName] => Rosenskjold Jacobsen 
+[formatted] => Lars Rosenskjold Jacobsen ) 
+
+[displayName] => RedFox 
+[currentLocation] => Kolding 
+
+[emails] => Array ( 
+[0] => Array ( 
+[primary] => true 
+[value] => lrjgravatar.vamdrupit.dk ) ) 
+
+[accounts] => Array ( 
+[0] => Array ( 
+[domain] => blogger.com 
+[display] => blogger.com 
+[url] => http://www.blogger.com/profile/03238699573302664021 
+[userid] => 03238699573302664021 
+[verified] => true 
+[shortname] => blogger ) 
+
+[1] => Array ( 
+[domain] => facebook.com 
+[display] => lars.r.jacobsen 
+[url] => http://www.facebook.com/lars.r.jacobsen 
+[username] => lars.r.jacobsen 
+[verified] => true 
+[shortname] => facebook ) 
+
+[2] => Array ( 
+[domain] => profiles.google.com 
+[display] => profiles.google.com 
+[url] => http://profiles.google.com/118208225723513955165 
+[userid] => 118208225723513955165 
+[verified] => true 
+[shortname] => google ) 
+
+[3] => Array ( 
+[domain] => linkedin.com 
+[display] => linkedin.com 
+[url] => http://www.linkedin.com/pub/lars-rosenskjold-jacobsen/26/426/590 
+[username] => linkedin.com 
+[verified] => true 
+[shortname] => linkedin ) 
+
+[4] => Array ( 
+[domain] => twitter.com 
+[display] => @larsrj 
+[url] => http://twitter.com/larsrj 
+[username] => larsrj 
+[verified] => true 
+[shortname] => twitter ) ) 
+
+[urls] => Array ( ) ) 
