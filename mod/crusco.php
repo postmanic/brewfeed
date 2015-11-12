@@ -1,5 +1,16 @@
 <?php
 
+/**
+ *
+ * BrewFeed
+ * 
+ * filename: crusco.php
+ * 
+ * Copyright: Lars Jacobsen
+ * Author: Lars Jacobsen
+ * 
+ *
+ **/
 
     $brugernavn = $_REQUEST['brugernavn'];
     $navn = $_REQUEST['navn'];

@@ -2,19 +2,21 @@
 
 /**
  *
- * BEER
+ * BrewFeed
  * 
- * styledef.php
- *
- * Copyright: Vamdrup IT
- * Author: RedFox Software
- * Oprettet:  2012
+ * filename: error_handler.php
+ * 
+ * Copyright: Lars Jacobsen
+ * Author: Lars Jacobsen
+ * 
  *
  **/
 
+// Denne fil er inklusive index. Der er allerede lavet et kald til userid
  
-$usermgr = new UserManager();
-$userid = $usermgr->sessionLoggedIn(session_id());
+//$usermgr = new UserManager();
+//$userid = $usermgr->sessionLoggedIn(session_id());
+
 $plainmail = $usermgr->getAccountInfo($userid);
 $usermail = md5 (strtolower( trim( $plainmail['email'] ) ));
 $str = file_get_contents( 'http://www.gravatar.com/'.$usermail.'.php' );

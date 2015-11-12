@@ -2,63 +2,32 @@
 
 /**
  *
- * STARMOLE
+ * BrewFeed
  * 
- * user_manager.inc.php
+ * filename: brew_manager.inc.php
  * 
- * Copyright: Vamdrup IT
- * Author: Lars Rosenskjold Jacobsen
- * Oprettet:  2008
+ * Copyright: Lars Jacobsen
+ * Author: Lars Jacobsen
+ * 
  *
  **/
 
+ 
 class BrewManager
 {
+  public $id;  
+  public $name;
+  public $stilart;
+  public $og;
+  public $fg;
+  public $febc;
+  public $eebc;
+  public $bebcd;
+    
+    
+  // TODO 2 -o LRJ GITHUB issue #1 passing object to function 
   
-  public function userBrewAllowed($in_userid)  
-  {
-
-    if ($in_email == '')
-      throw new InvalidInputException();
-
-    $conn = DBH::opretForbindelse();
-
-    try
-    {
-
-      $email = $this->super_escape_string($in_email);
-      $qstr = <<<EOQUERY
-SELECT userid, email FROM user WHERE email = '$email'
-EOQUERY;
-
-      $results = @$conn->query($qstr);
-      if ($results === FALSE)
-        throw new DatabaseErrorException($conn->error);
-
-      $useremail_exists = FALSE;
-      while (($row = @$results->fetch_assoc()) !== NULL)
-      {
-        if ($row['email'] == $email)
-        {
-          $useremail_exists = $row['userid'];
-          break;
-        }
-      }
-
-    }
-    catch (Exception $e)
-    {
-
-      if ($in_db_conn === NULL and isset($conn))
-        $conn->close();
-      throw $e;
-    }
-
-    $results->close();
-    return $useremail_exists;
-  } 
-  
-  public function createBrew($in_name, $in_userid, $in_brygget, $in_stilart, $in_beskrivelse, $in_og, $in_fg, $in_alk, $in_ibu, $in_ebc)
+  public function brewCreate($in_name, $in_userid, $in_brygget, $in_stilart, $in_beskrivelse, $in_og, $in_fg, $in_alk, $in_ibu, $in_ebc)
   {
 
     if ($in_userid == '')
@@ -80,7 +49,6 @@ SQLTEKST;
       $results = @$conn->query($qstr);
       if ($results === FALSE)
         throw new DatabaseErrorException($conn->error);
-
       $brew_id = $conn->insert_id;
       $conn->commit();
     }
@@ -95,18 +63,50 @@ SQLTEKST;
     return $brew_id;
   }
 
-  public function getBrewInfo($in_userid, $in_brewid)    
+  public function brewChange($in_name, $in_userid, $in_brygget, $in_stilart, $in_beskrivelse, $in_og, $in_fg, $in_alk, $in_ibu, $in_ebc)
   {
-    //
-    // 1. make sure we have a database connection.
-    //
+
+    if ($in_userid == '')
+    {
+  throw new InvalidLoginException(); 
+    }
+
     $conn = DBH::opretForbindelse();
 
     try
     {
-      //
-      // 2. prepare and execute query.
-      //
+
+$query = <<<SQLTEKST
+        Update beer (beername, userid, brygget, stilart, beskrivelse, og, fg, alk, ibu, ebc)
+        VALUES ('$name', '$userid', '$brygget', '$stilart."', '$beskrivelse','$og', '$fg', '$alk', '$ibu', '$ebc')
+SQLTEKST;
+
+      $conn->autocommit(FALSE);
+      $results = @$conn->query($qstr);
+      if ($results === FALSE)
+        throw new DatabaseErrorException($conn->error);
+
+      $brew_id = $conn->insert_id;
+      $conn->commit();
+    }
+    catch (Exception $e)
+    {
+      if (isset($conn))
+        $conn->close();
+      throw $e;
+    }
+
+    $conn->close();
+    return $brew_id;
+  }
+  
+  public function brewInfo($in_brewid)    
+  {
+
+    $conn = DBH::opretForbindelse();
+
+    try
+    {
 
       $qstr = <<<EOQUERY
 SELECT * FROM beer WHERE userid = '$in_userid' AND beerid = '$in_brewid'
@@ -140,18 +140,12 @@ EOQUERY;
     return $user_id;      
   }
   
-  public function getBrewList($in_userid)  
+  public function brewList($in_userid)  
   {
-    //
-    // 1. make sure we have a database connection.
-    //
     $conn = DBH::opretForbindelse();
 
     try
     {
-      //
-      // 2. prepare and execute query.
-      //
 
       $qstr = <<<EOQUERY
 SELECT * FROM user WHERE userid = '$in_userid'
@@ -185,29 +179,15 @@ EOQUERY;
     return $user_id;      
   }
   
-  public function deleteBrew($in_userid)
+  public function brewDelete($in_brewid)
   {
-    //
-    // 0. verify parameters
-    //
-    if (!is_int($in_userid))
-      throw new InvalidArgumentException();
 
-    //
-    // 1. get a database connection with which to work.
-    //
-    $conn = $this->getConnection();
+    $conn = DBH::opretForbindelse();
+
     try
     {
-      //
-      // 2. make sure user is logged out.
-      //
-      $this->clearLoginEntriesForSessionID(session_id());
 
-      //
-      // 3. create query to delete given user and execute!
-      //
-      $qstr = "DELETE FROM Tbruger WHERE user_id = $in_userid";
+      $qstr = "DELETE FROM brew WHERE brew_id = $in_brewid";
       $result = @$conn->query($qstr);
       if ($result === FALSE)
         throw new DatabaseErrorException($conn->error);
@@ -227,11 +207,11 @@ EOQUERY;
 
   //
   //=----------------------=
-  // private functions next
+  // private functions
   //=----------------------=
   //
   
-  private function super_escape_string($in_string)
+  private function escape_string($in_string)
   {
     // $str = $in_string;
     return preg_replace('([%;])', '\\\1', $in_string);

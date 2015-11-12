@@ -2,24 +2,15 @@
 
 /**
  *
- * www.pigit.dk
+ * BrewFeed
  * 
- * dbhandler.fnc.php
+ * filename: dbhandler.php
  * 
- * Copyright: Vamdrup IT
- * Author: Lars Rosenskjold Jacobsen
- * Oprettet:  2005
+ * Copyright: Lars Jacobsen
+ * Author: Lars Jacobsen
+ * 
  *
  **/
-
-
-// Inkluderer database inforamtion med reqire_once, hvis filen er inkluderet et andet sted giver det ikke en fejl.
-    
-
-
-// DBH håndterer vores forbindelse.
-// Der vil kun blive oprettet forbindelse en gang, uanset hvor mange gange den kaldes.
-// Det er ikke nødvendigt at lukke forbindelsen, det gør PHP for os ved script stop.
 
 class DBH
 {

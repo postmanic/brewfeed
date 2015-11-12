@@ -2,18 +2,14 @@
 
 /**
  *
- * WWW.PIGIT.DK
+ * BrewFeed
  * 
- * error_handler.inc.php
- *
- * Copyright: Vamdrup IT
- * Author: Lars Rosenskjold Jacobsen
- * Oprettet:  2005
- *
- * Rettet 26. januar 2010
- * Rettet 02. april 2010
- * Rettet 09. april 2010
+ * filename: error_handler.php
  * 
+ * Copyright: Lars Jacobsen
+ * Author: Lars Jacobsen
+ * 
+ *
  **/
 
 
@@ -162,11 +158,20 @@ class UserAlreadyExistsException extends Exception
   }
 }
 
+class UserEmailAlreadyExistsException extends Exception
+{
+  public function __construct()
+  {
+    parent::__construct('An email with the given name already exists.');
+  }
+}
+
+
 class NoSuchUserException extends Exception
 {
   public function __construct()
   {
-    parent::__construct('No Such User exists');
+    parent::__construct('Forkert brugernavn eller kodeord');
   }
 }
 

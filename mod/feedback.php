@@ -28,29 +28,22 @@ Default:
 
 echo  <<<HTML_OUT
 
-
-<table bgcolor ="white" align="center" border="0" align="center" height="700px" width="100%" cellpadding="30" cellspacing="1">
+<table align="center" bgcolor="white" height="700px" width="100%" border="0">
     <tr>
-        <td align="center" width="70%" colspan="2">      
-            <table>
-            <form action='index.php?page=fearfo.php' method='POST'>      
-                <tr>
-                    <td align="center">
-                    <h1>FEEDBACK</h1><p align="center">Skan eller indtast koden i felterne herunder</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center">
-                   <input name="beerid" type="text" style="width:15em;"><br/><br/>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center">
-                    <input type="submit" value="GO" class="q_button" />
-                    </td>
-                </tr>
-            </form>       
-            </table>
+        <td>      
+
+            <form id="login" action='index.php?page=fearfo.php' method='POST'>
+            <h1>FEEDBACK</h1><p align="center">Indtast koden i feltet herunder</p>                  
+
+       <fieldset id="inputs">
+        <input name="beerid" id="username" type="text" placeholder="Indtast kode fra etiket" autofocus required>   
+           </fieldset>
+    <fieldset id="actions">
+        <input type="submit" id="submit" value="Bed&oslash;m">
+        <a href="">Hvordan bed&oslash;mmer jeg?</a><a href="index.php?page=crusfo.php">Ny bruger</a>
+    </fieldset>
+</form>      
+
         </td>
 
     

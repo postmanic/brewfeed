@@ -2,41 +2,28 @@
 
 /**
  *
- * YAP.DK
+ * BrewFeed
  * 
- * process_login.php
+ * filename: liusco.php
  * 
- * Copyright: Vamdrup IT
- * Author: Lars Rosenskjold Jacobsen
- * Oprettet:  2008
+ * Copyright: Lars Jacobsen
+ * Author: Lars Jacobsen
+ * 
  *
  **/
 
 
-
  
-// TODO 2 -o Lars -c Prog: Der skal checkes ved forkerte password. hvis der er for mange fejl indtastninger fra samme ip, skal ip bannes. Eller sådan noget. Der skal også være mulighed for at anvende FACEBOOK     
-    
-if (!isset($_REQUEST['user_name']) || $_REQUEST['user_name'] == ''
-    || !isset($_REQUEST['user_pass']) || $_REQUEST['user_pass'] == '')
-{ 
 
-echo <<<TEKST
-    
-<meta http-equiv="refresh" content="0;url=/">
+  $user_name = $_REQUEST['user_name'];
+  $user_pass = $_REQUEST['user_pass'];
 
-TEKST;
-  
-exit;
+
+$userid = $usermgr->processLogin($user_name, $user_pass);
+
+if ($userid === -1) {
 }
-else
-{
-// TODO 2 -o Lars -c Prog: _request skal renses for injection.       
-  $user_name = $_POST['user_name'];
-  $user_pass = $_POST['user_pass'];
-}
-
-$usermgr->processLogin($user_name, $user_pass);
+else {
 
 echo <<<TEKST
 
@@ -56,5 +43,6 @@ echo <<<TEKST
 
 
 TEKST;
+}
 
 ?>

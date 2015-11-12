@@ -74,7 +74,7 @@ else
     <td>
 
 <form id="login" action="index.php?page=liusco.php" method="post">
-    <h1>BEER FEED</h1>
+    <h1>BEERFEED</h1>
     <fieldset id="inputs">
         <input name="user_name" id="username" type="text" placeholder="Brugernavn" autofocus required>   
         <input name="user_pass" id="password" type="password" placeholder="Adgangskode" required>

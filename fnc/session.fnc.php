@@ -2,13 +2,13 @@
 
 /**
  *
- * WWW.PIGIT.DK
+ * BrewFeed
  * 
- * session.fnc.php
+ * filename: session.php
  * 
- * Copyright: Vamdrup IT
- * Author: Lars Rosenskjold Jacobsen
- * Oprettet:  2005
+ * Copyright: Lars Jacobsen
+ * Author: Lars Jacobsen
+ * 
  *
  **/
 

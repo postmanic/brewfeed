@@ -38,6 +38,6 @@ define('DIR_WS_MODULES', 'mod/');
 define('DIR_WS_LANGUAGES', 'lng/');
 define('parse_time', $parse_time);
 define('PAGE_PARSE_START_TIME', microtime());
-define('SOLO_VERSION', 'PigIt Version 1.3a');
+define('SOLO_VERSION', 'BrewFeed V 1.0');
 
 ?>

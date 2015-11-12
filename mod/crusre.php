@@ -2,24 +2,23 @@
 
 /**
  *
- * BEER
+ * BrewFeed
  * 
- * styledef.php
- *
- * Copyright: Vamdrup IT
- * Author: RedFox Software
- * Oprettet:  2012
+ * filename: crusre.php
+ * 
+ * Copyright: Lars Jacobsen
+ * Author: Lars Jacobsen
+ * 
  *
  **/
 
-$selfparts = mbsplit('/', $_SERVER['PHP_SELF']);
-
-$file = preg_replace('\\\\', '/', __FILE__);
-$fileparts = mbsplit('/', $file);
+$selfparts = mb_split('/', $_SERVER['PHP_SELF']);
+$file = preg_replace('/\\\\/', '/', __FILE__);
+$fileparts = mb_split('/', $file);
 
 if ($selfparts[count($selfparts) - 1] == $fileparts[count($fileparts) - 1])
     {
-    header ('location:/');
+    header('location: /');
     exit;
     }
 

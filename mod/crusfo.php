@@ -1,6 +1,16 @@
 <?php
 
-// Create User 
+/**
+ *
+ * BrewFeed
+ * 
+ * filename: error_handler.php
+ * 
+ * Copyright: Lars Jacobsen
+ * Author: Lars Jacobsen
+ * 
+ *
+ **/
 
 
 
@@ -22,7 +32,7 @@ echo <<<HTML_OUT
     </fieldset>
     <fieldset id="actions">
         <input type="submit" id="submit" value="Opret">
-
+     <a>Terms of Service</a> <a>Privacy Policy</a>
     </fieldset>
 </form>
 

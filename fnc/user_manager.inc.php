@@ -2,22 +2,32 @@
 
 /**
  *
- * STARMOLE
+ * BrewFeed
  * 
- * user_manager.inc.php
+ * filename: user_manager.php
  * 
- * Copyright: Vamdrup IT
- * Author: Lars Rosenskjold Jacobsen
- * Oprettet:  2008
+ * Copyright: Lars Jacobsen
+ * Author: Lars Jacobsen
+ * 
  *
  **/
 
+
+ 
 class UserManager
 {
+  public $userid;
+  public $username;
+  public $name;
+  public $areacode;
+  public $email;
+  public $gravatar;
+  public $logincode;
+  public $joined;
   
   public function isValidUserName($in_user_name)
   {
-    if ($in_user_name == '' or ereg('[^[:alnum:] _-]', $in_user_name) === TRUE)
+    if ($in_user_name == '' or ctype_alnum($in_user_name) === FALSE)
       return FALSE;
     else
       return TRUE;
@@ -34,7 +44,7 @@ class UserManager
     try
     {
 
-      $email = $this->super_escape_string($in_email);
+      $email = $this->escape_string($in_email);
       $qstr = <<<EOQUERY
 SELECT userid, email FROM user WHERE email = '$email'
 EOQUERY;
@@ -77,7 +87,7 @@ EOQUERY;
     try
     {
 
-      $name = $this->super_escape_string($in_uname);
+      $name = $this->escape_string($in_uname);
       $qstr = <<<EOQUERY
 SELECT brugernavn FROM user WHERE brugernavn = '$name'
 EOQUERY;
@@ -110,7 +120,11 @@ EOQUERY;
 
   public function createAccount($brugernavn, $navn, $email, $kodeord)
   {
-
+  $brugernavn = $this->escape_string($brugernavn);
+  $navn = $this->escape_string($navn);
+  $email = $this->escape_string($email);
+  $kodeord = $this->escape_string($kodeord);  
+      
     if ($brugernavn == '' or $kodeord == '' or $email == '' or !$this->isValidUserName($brugernavn))
     {
   throw new InvalidLoginException(); 
@@ -123,12 +137,10 @@ EOQUERY;
       $exists = FALSE;
       $exists = $this->userNameExists($brugernavn, $conn);
       if ($exists === TRUE)           
-    throw new InvalidLoginException(); 
+    throw new UserAlreadyExistsException(); 
       $exists = $this->userEmailExists($email, $conn);
       if ($exists === TRUE)
-    throw new InvalidLoginException();
-      $brugernavn = $this->super_escape_string($brugernavn, $conn);
-      $email = $this->super_escape_string($email, $conn);
+    throw new UserEmailAlreadyExistsException();
       $pwkodeord = md5($kodeord);
 
       $qstr = <<<EOQUERY
@@ -157,24 +169,26 @@ EOQUERY;
 
   public function processLogin($in_user_name, $in_user_passwd)
   {
-
-  if ($in_user_name == '' || $in_user_passwd == '')
+   $uname = $this->escape_string($in_user_name);
+   $upasswd = $this->escape_string($in_user_passwd);
+        
+  if ($uname == '' || $upasswd == '')
+   // Hvis input er tomt er der snyd! java checker om der er tastet i felterne.
   throw new InvalidLoginException(); 
 
     $sessionid = session_id();
     $conn = DBH::opretForbindelse();
-
+    
+    
     try
     {
-      $userid = $this->confirmUserNamePasswd($in_user_name, $in_user_passwd);
-
+      $userid = $this->confirmUserNamePasswd($uname, $upasswd);
       $this->clearLoginEntriesForUser($userid);
-
+ 
       $query = <<<EOQUERY
 INSERT INTO loggedinusers(user_id, sessionid, lastupdate)
      VALUES('$userid', '$sessionid', NOW())
 EOQUERY;
-
      
       $result = @$conn->query($query);
       if ($result === FALSE)
@@ -186,11 +200,8 @@ EOQUERY;
         $conn->close();
       throw $e;
     }
-
-    //
-    // our work here is done.  clean up and exit.
-    //
     $conn->close();
+    return $userid;
   }
 
   public function processLogout()
@@ -210,7 +221,7 @@ EOQUERY;
     try
     {
 
-      $sess_id = $this->super_escape_string($in_sid);
+      $sess_id = $this->escape_string($in_sid);
       $query = <<<EOQUERY
 SELECT * FROM loggedinusers WHERE sessionid = '$sess_id'
 EOQUERY;
@@ -249,16 +260,12 @@ EOQUERY;
 
   public function getAccountInfo($in_userid)  
   {
-    //
-    // 1. make sure we have a database connection.
-    //
+
     $conn = DBH::opretForbindelse();
 
     try
     {
-      //
-      // 2. prepare and execute query.
-      //
+
 
       $qstr = <<<EOQUERY
 SELECT * FROM user WHERE userid = '$in_userid'
@@ -338,7 +345,7 @@ EOQUERY;
   //=----------------------=
   //
   
-  private function super_escape_string($in_string)
+  private function escape_string($in_string)
   {
     // $str = $in_string;
     return preg_replace('([%;])', '\\\1', $in_string);
@@ -347,39 +354,27 @@ EOQUERY;
 
   private function confirmUserNamePasswd($in_user_name, $in_user_passwd)
   {
-
     $in_user_name = strtolower($in_user_name);
     $conn = DBH::opretForbindelse();
 
     try
     {
-      //
-      // make sure incoming user name is safe for queries.
-      //
-      $uname = $this->super_escape_string($in_user_name);
 
-      // get the record with this user name
       $querystr = <<<EOQUERY
 SELECT * FROM user
- WHERE brugernavn = '$uname'
+ WHERE brugernavn = '$in_user_name'
 EOQUERY;
 
       $results = @$conn->query($querystr);
       if ($results === FALSE)
         throw new DatabaseErrorException($conn->error);
 
-      //
-      // re-confirm the name matches and the passwords do too.
-      //
       $login_ok = FALSE;
       while (($row = @$results->fetch_assoc()) !== NULL)
       {
         $db_name = strtolower($row['brugernavn']);
         if (strcmp($db_name, $in_user_name) == 0)
         {
-          //
-          // good, name matched.  does password?
-          //
           if (md5($in_user_passwd) == $row['kodeord'])
           {
             $login_ok = TRUE;
@@ -390,17 +385,15 @@ EOQUERY;
           break;
         }
       }
- 
-
     }
     catch (Exception $e)
     {
-
       throw $e;
     }
 
     if ($login_ok === FALSE)
-    throw new InvalidLoginException(); 
+    
+    throw new NoSuchUserException(); 
     
     $results->close();
     return $userid;
@@ -435,7 +428,7 @@ EOQUERY;
 
     try
     {
-      $sessid = $this->super_escape_string($in_sid);
+      $sessid = $this->escape_string($in_sid);
       $query = <<<EOQ
 DELETE FROM loggedinusers WHERE sessionid ='$sessid'
 EOQ;
@@ -459,7 +452,7 @@ EOQ;
     try
     {
 
-      $sessid = $this->super_escape_string($in_sessid);
+      $sessid = $this->escape_string($in_sessid);
       $querystr = <<<EOQUERY
 UPDATE loggedinusers SET lastupdate = NOW()
   WHERE sessionid = '$in_sessid'
